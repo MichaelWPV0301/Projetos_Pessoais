@@ -10,10 +10,10 @@ continuar = True
 
 def mudar_jogador():
     if continuar==False:
-        if jogador==False:
-            label_indicador.config(text="Parabéns ao jogador 1, o vencedor!")
+        if jogador:
+            label_indicador.config(text="Parabéns ao jogador 1, o vencedor!", fg=dourado)
         else:
-            label_indicador.config(text="Parabéns ao jogador 2, o vencedor!")
+            label_indicador.config(text="Parabéns ao jogador 2, o vencedor!", fg=dourado)
     elif jogador:
         label_indicador.config(text="Vez do Jogador 1")
     else:
@@ -47,6 +47,9 @@ roxo = "#4f0180"
 roxo_neon = "#ad6ed4"
 azul = '#73cbeb'
 azul_lobby = "#302d5c"
+azul_escuro =  "#00008B"
+dourado = "#B8860B"
+branco = "#FFFFFF"
 
 janela = Tk()
 janela.geometry('500x650')
@@ -61,9 +64,9 @@ frame_grade.place(relx=0.17, rely=0.15, relwidth=0.66, relheight=0.5)
 
 
 #frame do indicador de jogador
-frame_indicador = Frame(janela, bg="red", borderwidth=2, relief="groove")
+frame_indicador = Frame(janela, bg=branco, borderwidth=2, relief="groove")
 frame_indicador.place(relx=0.1, rely=0.75, relwidth=0.8, relheight=0.1)
-label_indicador = Label(frame_indicador, text = "Vez do jogador 1", fg="white", bg="red", font=("Verdana", 14, "bold"))
+label_indicador = Label(frame_indicador, text = "Vez do jogador 1", fg=azul_escuro, bg=branco, font=("Verdana", 14, "bold"))
 label_indicador.pack(expand=True, fill="both")
 
 
@@ -188,6 +191,7 @@ def main_loop():
         contador += 1
         jogador = not jogador
         mudar_jogador()
+    mudar_jogador()
 
 janela.after(100, main_loop)
 janela.mainloop()
