@@ -1,11 +1,39 @@
 from tkinter import *
 from tkinter import ttk
+from time import sleep
 
 jogador = True
 contador = 0
 jogada = 0
 jogadas = [1,2,3,4,5,6,7,8,9]
 continuar = True
+jogar = True
+
+def recolocar_frame(frame, relx, rely, relwidth, relheight):
+    frame.place(relx=relx, rely=rely, relwidth=relwidth, relheight=relheight)
+
+def frame_overlay():
+    global jogar, var2
+    def clicar_jogar():
+        global jogar, var2
+        jogar = not jogar
+        print("Clicou no botão!")
+        var2.set(1)
+
+    #configurando a janela de pergunta:
+    overlay = Frame(janela, bg=dourado)
+    overlay.place(relx=0.25, rely = 0.2, relheight= 0.4, relwidth=0.5)
+    overlay.lift()
+    
+    #configurando o botão para clicar com a intenção de jogar
+    botao_jogar = Button(overlay, command= clicar_jogar, bg=branco, borderwidth=0)
+    botao_jogar.place(relx=0.2, rely=0.2, relwidth=0.33, relheight=0.3)
+
+
+    desabilitar_frame(frame_grade)
+    overlay.wait_variable(var2)
+    overlay.destroy()
+    habilitar_frame(frame_grade)
 
 
 def mudar_jogador():
@@ -23,6 +51,10 @@ def mudar_jogador():
 def desabilitar_frame(frame):
     for child in frame.winfo_children():
         child.configure(state='disabled')
+
+def habilitar_frame(frame):
+    for child in frame.winfo_children():
+        child.configure(state='normal')
 
 def cliclar_botao(buttonid, botao):
     global jogada
@@ -51,11 +83,14 @@ azul_escuro =  "#00008B"
 dourado = "#B8860B"
 branco = "#FFFFFF"
 
+#configurações principais
 janela = Tk()
 janela.geometry('500x650')
 janela.title('Joogo da velha')
 janela.config(bg=roxo)
+var2 = IntVar(value=0)
 var = IntVar(value=0)
+
 
 
 #frame das linhas do jogo de xadrez
@@ -134,11 +169,22 @@ def main_loop():
             linha.append(f"{contador}")
         mapear_grade.append(linha)
     contador = 0
-    
+
+    #ocultar o frame indicador
+    frame_indicador.place_forget()
+
+
+    #teste do frame overlay:
+    frame_overlay()
+
     #algoritmo do jogo da velha:
     while continuar:
         #comando para esperar o usuário apertar algum botão:
         frame_grade.wait_variable(var)
+
+        #ativar o frame indicador:
+        recolocar_frame(frame_indicador, relx=0.1, rely=0.75, relwidth=0.8, relheight=0.1)
+
 
         #modificar a jogada na grade(mapear_grade) que vai ser analisada:
         if jogador:
