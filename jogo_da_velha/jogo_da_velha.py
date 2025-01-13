@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import ttk
-from time import sleep
 
 jogador = True
 contador = 0
@@ -24,6 +23,10 @@ def frame_overlay():
     overlay = Frame(janela, bg=dourado)
     overlay.place(relx=0.25, rely = 0.2, relheight= 0.4, relwidth=0.5)
     overlay.lift()
+
+    
+    #ocultar o frame indicador
+    frame_indicador.place_forget()
     
     #configurando o botão para clicar com a intenção de jogar
     botao_jogar = Button(overlay, command= clicar_jogar, bg=branco, borderwidth=0)
@@ -50,11 +53,18 @@ def mudar_jogador():
 
 def desabilitar_frame(frame):
     for child in frame.winfo_children():
-        child.configure(state='disabled')
+        try:
+            child.configure(state='disabled')
+        except TclError:
+            pass
+
 
 def habilitar_frame(frame):
     for child in frame.winfo_children():
-        child.configure(state='normal')
+        try:
+            child.configure(state='normal')
+        except TclError:
+            pass
 
 def cliclar_botao(buttonid, botao):
     global jogada
@@ -161,6 +171,12 @@ def main_loop():
     global jogador
     mapear_grade = []
 
+    #chamar a janela principal:
+    frame_overlay()
+
+    #ativar o frame indicador:
+    recolocar_frame(frame_indicador, relx=0.1, rely=0.75, relwidth=0.8, relheight=0.1)
+
     #montar a grade para a analise:
     for _ in range (1,4):
         linha = []
@@ -170,21 +186,10 @@ def main_loop():
         mapear_grade.append(linha)
     contador = 0
 
-    #ocultar o frame indicador
-    frame_indicador.place_forget()
-
-
-    #teste do frame overlay:
-    frame_overlay()
-
     #algoritmo do jogo da velha:
     while continuar:
         #comando para esperar o usuário apertar algum botão:
         frame_grade.wait_variable(var)
-
-        #ativar o frame indicador:
-        recolocar_frame(frame_indicador, relx=0.1, rely=0.75, relwidth=0.8, relheight=0.1)
-
 
         #modificar a jogada na grade(mapear_grade) que vai ser analisada:
         if jogador:
@@ -238,6 +243,6 @@ def main_loop():
         jogador = not jogador
         mudar_jogador()
     mudar_jogador()
-
+    
 janela.after(100, main_loop)
 janela.mainloop()
