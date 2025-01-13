@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+from time import sleep
 
 jogador = True
 contador = 0
@@ -7,9 +8,15 @@ jogada = 0
 jogadas = [1,2,3,4,5,6,7,8,9]
 continuar = True
 jogar = True
+botoes = []
 
 def recolocar_frame(frame, relx, rely, relwidth, relheight):
     frame.place(relx=relx, rely=rely, relwidth=relwidth, relheight=relheight)
+
+
+def esperar(funcao):
+    janela.after(3000, funcao)
+
 
 def frame_overlay():
     global jogar, var2
@@ -84,6 +91,30 @@ def cliclar_botao(buttonid, botao):
         elif not jogador and continuar:
             botao.config(text="⭕", font=("Verdana", 35), fg="#00FFFF")
 
+
+#tem que criar uma função que vai resetar todas as configurações para o jogo ocorrer novamente:
+
+def  resetar_jogo():
+    global jogador, jogar, var, var2, jogada, jogadas, continuar, contador, botoes
+     
+
+    #zerar as variáveis:
+    jogador = True
+    contador = 0
+    jogada = 0
+    jogadas = [1,2,3,4,5,6,7,8,9]
+    continuar = True
+    jogar = True
+    var.set(0)
+    var2.set(0)
+
+
+    #zerar a grade de jogo:
+    for btn in botoes:
+        btn.config(text="")
+
+    main_loop()
+
 #cores
 roxo = "#4f0180"
 roxo_neon = "#ad6ed4"
@@ -135,30 +166,39 @@ linha2_v.place(relx=0.66, rely=0, relwidth=0.018, relheight=1)
 #botões para o jogo:
 botao1 = Button(frame_grade,  command= lambda: cliclar_botao(int(1), botao1), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao1.place(relx=0, rely=0, relwidth=0.33, relheight=0.3)
+botoes.append(botao1)
 
 botao2 = Button(frame_grade, command= lambda: cliclar_botao(int(2), botao2), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao2.place(relx=0.35, rely=0, relwidth=0.31, relheight=0.3)
+botoes.append(botao2)
 
 botao3 = Button(frame_grade, command= lambda: cliclar_botao(int(3), botao3), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao3.place(relx=0.68, rely=0, relwidth=0.33, relheight=0.3)
+botoes.append(botao3)
 
 botao4 = Button(frame_grade, command= lambda: cliclar_botao(int(4), botao4), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao4.place(relx=0., rely=0.32, relwidth=0.33, relheight=0.28)
+botoes.append(botao4)
 
 botao5 = Button(frame_grade, command= lambda: cliclar_botao(int(5), botao5), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao5.place(relx=0.35, rely=0.32, relwidth=0.31, relheight=0.28)
+botoes.append(botao5)
 
 botao6 = Button(frame_grade, command= lambda: cliclar_botao(int(6), botao6),  bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao6.place(relx=0.68, rely=0.32, relwidth=0.33, relheight=0.28)
+botoes.append(botao6)
 
 botao7 = Button(frame_grade, command= lambda: cliclar_botao(int(7), botao7), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao7.place(relx=0., rely=0.62, relwidth=0.33, relheight=0.38)
+botoes.append(botao7)
 
 botao8 = Button(frame_grade, command= lambda: cliclar_botao(int(8), botao8), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao8.place(relx=0.35, rely=0.62, relwidth=0.31, relheight=0.38)
+botoes.append(botao8)
 
 botao9 = Button(frame_grade, command= lambda: cliclar_botao(int(9), botao9), bg=roxo, borderwidth=0, highlightthickness=0, relief="flat")
 botao9.place(relx=0.68, rely=0.62, relwidth=0.33, relheight=0.38)
+botoes.append(botao9)
 #desabilitar_frame(frame_grade)
 
 
@@ -186,6 +226,7 @@ def main_loop():
         mapear_grade.append(linha)
     contador = 0
 
+    label_indicador.config(text="Vez do Jogador 1")
     #algoritmo do jogo da velha:
     while continuar:
         #comando para esperar o usuário apertar algum botão:
@@ -243,6 +284,7 @@ def main_loop():
         jogador = not jogador
         mudar_jogador()
     mudar_jogador()
-    
+    esperar(resetar_jogo)
+
 janela.after(100, main_loop)
 janela.mainloop()
