@@ -20,7 +20,7 @@ Nesse repertório colacarei todos os meus projetos pessoais, e aqui botarei um s
  # 2 PROJETO: JOGO DA VELHA.
 
  Nesse projeto eu fiz uma mini jogo da vellha utilizando a mesma biblioteca da calculadora tkinter do python.
- O projeto tem dois arquivos, um contendo as fontes do projetos que você precisa instalar a font na sua maquina e no
+ O projeto tem dois arquivos, um contendo as fontes do projetos que você precisa instalar na sua maquina e no
  outro arquivo contém apenas a parte do código do jogo, e é o arquivo jogo_da_velha que você precisa abrir em uma IDE e executar.
 
  Assim ficou a interface do projeto do mini jogo da velha:
