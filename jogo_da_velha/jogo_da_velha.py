@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import ttk
-from time import sleep
+
 
 jogador = True
 contador = 0
@@ -12,6 +12,10 @@ botoes = []
 
 def recolocar_frame(frame, relx, rely, relwidth, relheight):
     frame.place(relx=relx, rely=rely, relwidth=relwidth, relheight=relheight)
+
+def fechar_jogo():
+    global janela
+    janela.destroy()
 
 
 def esperar(funcao):
@@ -27,18 +31,27 @@ def frame_overlay():
         var2.set(1)
 
     #configurando a janela de pergunta:
-    overlay = Frame(janela, bg=dourado)
+    overlay = Frame(janela, bg=azul_lobby)
     overlay.place(relx=0.25, rely = 0.2, relheight= 0.4, relwidth=0.5)
     overlay.lift()
 
     
     #ocultar o frame indicador
     frame_indicador.place_forget()
-    
-    #configurando o botão para clicar com a intenção de jogar
-    botao_jogar = Button(overlay, command= clicar_jogar, bg=branco, borderwidth=0)
-    botao_jogar.place(relx=0.2, rely=0.2, relwidth=0.33, relheight=0.3)
 
+
+    #label da logo do jogo da velha
+    label_logo = Label(overlay, text="J O G O   D A   V E L H A", fg=dourado, bg=azul_lobby, font=("my game", 13))
+    label_logo.place(relx=0, rely=0.1 , relwidth=1, relheight=0.2)
+    
+    #o botão para clicar com a intenção de jogar
+    botao_jogar = Button(overlay, text="I N I C I A R   J O G O", command= clicar_jogar, bg=branco, borderwidth=0, font=("my game", 9), fg=verde)
+    botao_jogar.place(relx=0.2, rely=0.4, relwidth=0.6, relheight=0.2)
+    
+
+    #configurando o botão de não querer jogar:
+    botao_fechar = Button(overlay, text="F E C H A R    J O G O", command= fechar_jogo, bg=branco, borderwidth=0, font=("my game", 9), fg=vermelho)
+    botao_fechar.place(relx=0.2, rely=0.7, relwidth=0.6, relheight=0.2)
 
     desabilitar_frame(frame_grade)
     overlay.wait_variable(var2)
@@ -48,9 +61,12 @@ def frame_overlay():
 
 def mudar_jogador():
     if continuar==False:
-        if jogador:
+        if jogador and contador!=8:
             label_indicador.config(text="Parabéns ao jogador 1, o vencedor!", fg=dourado)
+        elif contador==8:
+            label_indicador.config(text="Empatou, joguem novamente!", fg=roxo)
         else:
+            print("erro")
             label_indicador.config(text="Parabéns ao jogador 2, o vencedor!", fg=dourado)
     elif jogador:
         label_indicador.config(text="Vez do Jogador 1")
@@ -123,6 +139,8 @@ azul_lobby = "#302d5c"
 azul_escuro =  "#00008B"
 dourado = "#B8860B"
 branco = "#FFFFFF"
+verde = "#238E23"
+vermelho = "#8b0000"
 
 #configurações principais
 janela = Tk()
@@ -270,16 +288,18 @@ def main_loop():
             else:
                 print('Parabéns ao jogador 2, o vencedor!!')
             continuar = False
+            break
         elif mapear_grade[0][2] == mapear_grade [2][0] == mapear_grade[1][1]:
             if  jogador:
                 print('Parabéns ao jogador 1, o vencedor!!')
+                print("aqui")
             else:
                 print('Parabéns ao jogador 2, o vencedor!!')
             continuar = False
+            break
         elif contador==8:
-            print("empate")
             continuar = False
-
+            break
         contador += 1
         jogador = not jogador
         mudar_jogador()
